@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { doScreenshot } from '../../src/utils/helpers';
+import dotenv from 'dotenv'
+import path from 'path';
 
+// Load variables from .env file
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 test.describe('Home Page E2E Tests', () => {
 
