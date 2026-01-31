@@ -21,7 +21,7 @@ test.describe('Home Page E2E Tests', () => {
         await page.locator('.subjects-auto-complete__value-container').click();
 
 
-       //await doScreenshot('form-filled', testInfo, page);
+        await doScreenshot('form-filled', testInfo, page);
         await page.getByRole('button', { name: 'Submit' }).click();
         await doScreenshot('form-filled-submit', testInfo, page);
 
