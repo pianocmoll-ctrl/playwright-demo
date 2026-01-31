@@ -17,7 +17,7 @@ export default defineConfig({
     // 'on' - always capture after each test
     screenshot: 'only-on-failure',
     //fullPage: true,
-    viewport: { width: 1280, height: 720 },
+    viewport: { width: 1920, height: 1080 },
     // you can also enable video: 'on' | 'retain-on-failure' | 'off'
     // video: 'retain-on-failure',
   },
