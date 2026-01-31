@@ -20,8 +20,8 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test tests/e2e --workers=3
       env:
-          technical_test_user: ${{ secrets.technical_test_user }}
-          technical_test_user_password: ${{ secrets.technical_test_user_password }}
+          technical_test_user: ${{ secrets.TECHNICAL_TEST_USER }}
+          technical_test_user_password: ${{ secrets.TECHNICAL_TEST_USER_PASSWORD }}
 
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
@@ -49,9 +49,7 @@ jobs:
         from: GitHub Actions
         body: |
           Hello,
-
           The Playwright test suite has finished with the status: ${{ job.status }}.
-          
           You can find the detailed HTML report attached as a ZIP file. 
           To view it, download, extract, and open 'index.html'.
 

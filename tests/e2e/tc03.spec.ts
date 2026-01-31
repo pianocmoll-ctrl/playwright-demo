@@ -29,8 +29,8 @@ test.describe('Home Page E2E Tests', () => {
         await page.getByRole('button', { name: 'Submit' }).click();
         await doScreenshot('form-filled-submit', testInfo, page);
 
-        console.log(process.env.technical_test_user ?? '');
-        console.log(process.env.technical_test_user_password ?? '');
+        console.log(process.env.TECHNICAL_TEST_USER ?? '');
+        console.log(process.env.TECHNICAL_TEST_USER_PASSWORD ?? '');
         console.log('test case 3');
 
     });
