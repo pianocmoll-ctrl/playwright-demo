@@ -13,7 +13,7 @@ export async function doScreenshot(screenShotName: string, testInfo: any, page: 
         path: elementPath,
         contentType: 'image/png',
     });
-    await page.waitForTimeout(1000);
+
 
 }
 
