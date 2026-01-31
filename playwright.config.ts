@@ -6,7 +6,7 @@ export default defineConfig({
   expect: {
     timeout: 5000,
   },
-  reporter: 'html',
+  reporter: [['html'], ['github']],
   use: {
     headless: false,
     actionTimeout: 0,
