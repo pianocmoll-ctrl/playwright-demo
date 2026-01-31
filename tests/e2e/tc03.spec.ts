@@ -9,7 +9,7 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 test.describe('Home Page E2E Tests', () => {
 
 
-    test('test case 1', async ({ page }, testInfo) => {
+    test('test case 3', async ({ page }, testInfo) => {
 
         await page.goto("https://demoqa.com/automation-practice-form");
         await page.waitForTimeout(3000);
@@ -35,14 +35,6 @@ test.describe('Home Page E2E Tests', () => {
 
     });
 
-    test('test case 2', async ({ page }) => {
-        console.log('test case 2');
-
-    });
-
-    test('test case 3', async ({ page }) => {
-        console.log('test case 3');
-    });
 
     // Add more test cases as needed
 });
