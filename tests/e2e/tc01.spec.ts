@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { doScreenshot } from '../../src/utils/helpers';
-import dotenv from 'dotenv'
-import path from 'path';
+//import dotenv from 'dotenv'
+//import path from 'path';
 
 // Load variables from .env file
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+//dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 test.describe('Home Page E2E Tests', () => {
 
@@ -29,8 +29,8 @@ test.describe('Home Page E2E Tests', () => {
         await page.getByRole('button', { name: 'Submit' }).click();
         await doScreenshot('form-filled-submit', testInfo, page);
 
-        console.log(process.env.technical_test_user);
-        console.log(process.env.technical_test_user_password);
+        console.log(process.env.technical_test_user ?? '');
+        console.log(process.env.technical_test_user_password ?? '');
         console.log('test case 1');
 
     });
