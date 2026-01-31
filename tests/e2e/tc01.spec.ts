@@ -25,6 +25,8 @@ test.describe('Home Page E2E Tests', () => {
         await page.getByRole('button', { name: 'Submit' }).click();
         await doScreenshot('form-filled-submit', testInfo, page);
 
+        console.log(process.env.technical_test_user);
+        console.log(process.env.technical_test_user_password);
         console.log('test case 1');
 
     });

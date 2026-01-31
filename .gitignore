@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Playwright specific
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# TypeScript/Build outputs
+dist/
+lib/
+*.tsbuildinfo
+
+# Environment variables and secrets
+.env
+.env.local
+.env.test.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+Why these files?

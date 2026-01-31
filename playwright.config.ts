@@ -1,4 +1,9 @@
 import { defineConfig } from '@playwright/test';
+import dotenv from 'dotenv'
+import path from 'path';
+
+// Load variables from .env file
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
   testDir: './tests',
@@ -8,8 +13,11 @@ export default defineConfig({
   },
   reporter: [['html'], ['github']],
   use: {
+    actionTimeout: 15000,
+    navigationTimeout: 180000,
     headless: true,
-    actionTimeout: 0,
+    browserName: 'chromium',
+    acceptDownloads: true,
     trace: 'on-first-retry',
         // global screenshot policy:
     // 'off' - never capture automatically
@@ -20,5 +28,12 @@ export default defineConfig({
     viewport: { width: 1920, height: 1080 },
     // you can also enable video: 'on' | 'retain-on-failure' | 'off'
     // video: 'retain-on-failure',
+    //storageState: 'pssAuth.json',
+
+
+    httpCredentials: {
+      username: process.env.technical_test_user ?? '',
+      password: process.env.technical_test_user_password ?? '',  
+    },  
   },
 });
