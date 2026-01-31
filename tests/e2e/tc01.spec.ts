@@ -31,7 +31,7 @@ test.describe('Home Page E2E Tests', () => {
 
         console.log(process.env.TECHNICAL_TEST_USER ?? '');
         console.log(process.env.TECHNICAL_TEST_USER_PASSWORD ?? '');
-        console.log('test case 1XXXX');
+        console.log('test case 1');
 
 
     });
