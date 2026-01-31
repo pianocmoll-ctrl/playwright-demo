@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 
-test.describe.serial('Home Page E2E Tests', () => {
+test.describe('Home Page E2E Tests', () => {
 
 
     test('test case 1', async ({ page }) => {
