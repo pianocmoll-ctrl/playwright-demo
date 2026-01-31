@@ -8,7 +8,7 @@ export default defineConfig({
   },
   reporter: [['html'], ['github']],
   use: {
-    headless: false,
+    headless: true,
     actionTimeout: 0,
     trace: 'on-first-retry',
   },
