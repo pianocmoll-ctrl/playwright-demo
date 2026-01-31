@@ -1,21 +1,19 @@
-export function waitForElement(selector: string, timeout: number = 5000): Promise<void> {
-    return new Promise((resolve, reject) => {
-        const interval = setInterval(() => {
-            const element = document.querySelector(selector);
-            if (element) {
-                clearInterval(interval);
-                resolve();
-            }
-        }, 100);
+import { Page } from "playwright";
 
-        setTimeout(() => {
-            clearInterval(interval);
-            reject(new Error(`Element with selector "${selector}" not found within ${timeout}ms`));
-        }, timeout);
+
+
+export async function doScreenshot(screenShotName: string, testInfo: any, page: Page) {
+
+    page.waitForTimeout(1000);
+    const elementPath = testInfo.outputPath(screenShotName + '.png');
+    await page.locator('form').screenshot({ path: elementPath });
+    // attach the screenshot to the test so the HTML report shows it
+    testInfo.attachments.push({
+        name: 'home-form-element',
+        path: elementPath,
+        contentType: 'image/png',
     });
+    await page.waitForTimeout(1000);
+
 }
 
-export function formatDate(date: Date, format: string): string {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Intl.DateTimeFormat('en-US', options).format(date);
-}

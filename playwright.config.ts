@@ -8,8 +8,15 @@ export default defineConfig({
   },
   reporter: [['html'], ['github']],
   use: {
-    headless: true,
+    headless: false,
     actionTimeout: 0,
     trace: 'on-first-retry',
+        // global screenshot policy:
+    // 'off' - never capture automatically
+    // 'only-on-failure' - capture when a test fails
+    // 'on' - always capture after each test
+    screenshot: 'only-on-failure',
+    // you can also enable video: 'on' | 'retain-on-failure' | 'off'
+    // video: 'retain-on-failure',
   },
 });
