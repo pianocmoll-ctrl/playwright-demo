@@ -4,7 +4,7 @@ import { Page } from "playwright";
 
 export async function doScreenshot(screenShotName: string, testInfo: any, page: Page) {
 
-    page.waitForTimeout(1500);
+    page.waitForTimeout(2000);
     const elementPath = testInfo.outputPath(screenShotName + '.png');
     await page.locator('form').screenshot({ path: elementPath });
     // attach the screenshot to the test so the HTML report shows it
