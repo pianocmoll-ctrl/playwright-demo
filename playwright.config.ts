@@ -18,7 +18,7 @@ export default defineConfig({
   use: {
     actionTimeout: 15000,
     navigationTimeout: 180000,
-    headless: false,
+    headless: true, //run via GitHub workflow it must set as headless = true; else it would not work
     browserName: 'chromium',
     acceptDownloads: true,
     trace: 'on-first-retry',
