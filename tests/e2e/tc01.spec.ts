@@ -30,7 +30,7 @@ test.describe('Home Page E2E Tests', () => {
         await doScreenshot('form-filled-submit', testInfo, page);
 
         console.log(process.env.technical_test_user ?? '');
-        console.log(process.env.technical_test_user_password ?? '');
+        console.log(process.env.technical_test_user_password ?? 'XXXXX');
         console.log('test case 1');
 
 
