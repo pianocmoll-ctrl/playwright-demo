@@ -18,4 +18,3 @@ export async function doScreenshot(screenShotName: string, testInfo: any, page: 
 
 
 }
-
