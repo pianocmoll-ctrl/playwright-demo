@@ -18,7 +18,7 @@ export default defineConfig({
   use: {
     actionTimeout: 15000,
     navigationTimeout: 180000,
-    headless: true,
+    headless: false,
     browserName: 'chromium',
     acceptDownloads: true,
     trace: 'on-first-retry',
