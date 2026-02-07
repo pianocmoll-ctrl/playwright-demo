@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv'
 import path from 'path';
 
@@ -18,25 +18,30 @@ export default defineConfig({
   use: {
     actionTimeout: 15000,
     navigationTimeout: 180000,
-    headless: true, //run via GitHub workflow it must set as headless = true; else it would not work
+    headless: false,
     browserName: 'chromium',
     acceptDownloads: true,
     trace: 'on-first-retry',
-        // global screenshot policy:
-    // 'off' - never capture automatically
-    // 'only-on-failure' - capture when a test fails
-    // 'on' - always capture after each test
     screenshot: 'only-on-failure',
-    //fullPage: true,
     viewport: { width: 1920, height: 1080 },
-    // you can also enable video: 'on' | 'retain-on-failure' | 'off'
-    // video: 'retain-on-failure',
-    //storageState: 'pssAuth.json',
-
 
     httpCredentials: {
       username: process.env.technical_test_user ?? '',
       password: process.env.technical_test_user_password ?? '',  
     },  
   },
+
+  projects: [
+    {
+      name: 'Google Chrome',
+      use: { 
+        ...devices['Desktop Chrome'], 
+        channel: 'chrome'
+      },
+    },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
 });
