@@ -1,19 +1,13 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, request } from '@playwright/test';
+import fs from 'fs';
+import { getNetworkPayload} from '../../src/utils/read-network-data';
 
 test.describe('MaxBlue Account Opening Test', () => {
-
-
   test('should display personal data form after selection', async ({ page }) => {
-    // Navigate to the MaxBlue account opening page
     const url = 'https://www.maxblue.de/opra4x/public/maxblue/security-account-opening/#/page-1-0?restartApplication=true&pageName=Kostenloses%20Wertpapierdepot%20von%20maxblue%20&pageUrl=https:%2F%2Fwww.deutsche-bank.de%2Fpk%2Fsparen-und-anlegen%2Fgeldanlage-online%2Fdepot.html&topic=neutral&businessUnit=Privatkunden&source=PWS%20PFB-Portal';
-    
     await page.goto(url);
-    
-    // Wait for the page to load
     await page.waitForLoadState('networkidle');
 
-        // Step 1a: Wait for popup and click "Zustimmen mit Zusammenführung" (if it appears)
-    // Note: This popup might not always appear, so we use waitFor with timeout
     try {
       const consentButton = page.getByRole('button', { name: /Zustimmen mit Zusammenführung/i });
       await consentButton.waitFor({ timeout: 5000 });
@@ -22,31 +16,78 @@ test.describe('MaxBlue Account Opening Test', () => {
       console.log('Consent popup did not appear or was already dismissed');
     }
 
+    const payloadPromise = getNetworkPayload(page, '/address');
 
-    // Click on "Nein, noch nicht"
-    //await page.getByRole('radio', { name: 'Nein, noch nicht' }).click({ timeout: 15000 });
     await page.locator("//span[text()='Nein, noch nicht']").click({ timeout: 15000 });
-    // Verify "Einzeldepot" is available
-    //const einzeldepotOption = page.getByRole('radio', { name: 'Einzeldepot' });
-    //await expect(einzeldepotOption).toBeVisible();
-
-    // Click "Weiter"
     await page.getByRole('button', { name: 'Weiter' }).click();
+    await page.locator('.ml-2 > .db-radio-button__label > .db-radio-button__indicator > .db-radio-button__indicator-dot > svg > circle').click();
+    await page.getByRole('textbox', { name: 'Vorname(n)' }).fill('ssss');
+    await page.getByRole('textbox', { name: 'Nachname' }).fill('xxxx');
+    await page.getByLabel('Familienstand').selectOption('003_geschieden');
+    await page.getByRole('textbox', { name: 'Geburtsdatum (TT.MM.JJJJ)' }).fill('19.11.1965');
+    await page.getByRole('textbox', { name: 'Geburtsort' }).fill('Hamburg');
+    await page.getByText('Ich bin ausschließlich in').click();
+    await page.getByRole('textbox', { name: 'Straße und Hausnummer' }).fill('Musterstr. 220');
+    await page.getByRole('textbox', { name: 'PLZ' }).fill('20144');
+    await page.getByRole('textbox', { name: 'Stadt' }).fill('Hamburg');
+    await page.getByText('Werderstr. 220, 20144 Hamburg').click();
+    await page.getByRole('textbox', { name: 'Mobilnummer (z.B. +' }).fill('+491729875675');
+    await page.getByRole('textbox', { name: 'E-Mail' }).fill('dasdasd@gmail.com');
+    await page.getByRole('button', { name: 'Weiter', exact: true }).click();
 
-    // Wait for personal data form
+    const payload = await payloadPromise;
+    console.log('Intercepted Address Data:', payload);
+    fs.writeFileSync('payload.json', JSON.stringify(payload, null, 2));
+  });
+
+  test('should show error for invalid email', async ({ page }) => {
+    const url = 'https://www.maxblue.de/opra4x/public/maxblue/security-account-opening/#/page-1-0?restartApplication=true&pageName=Kostenloses%20Wertpapierdepot%20von%20maxblue%20&pageUrl=https:%2F%2Fwww.deutsche-bank.de%2Fpk%2Fsparen-und-anlegen%2Fgeldanlage-online%2Fdepot.html&topic=neutral&businessUnit=Privatkunden&source=PWS%20PFB-Portal';
+    await page.goto(url);
     await page.waitForLoadState('networkidle');
 
-    //await page.waitForTimeout(13000); // Wait for potential animations or dynamic content
+    try {
+      const consentButton = page.getByRole('button', { name: /Zustimmen mit Zusammenführung/i });
+      await consentButton.waitFor({ timeout: 5000 });
+      await consentButton.click();
+    } catch {}
 
-    /*
-    // Verify personal data form is displayed
-    await expect(page.locator('heading', { hasText: 'Ihr maxblue Depot' })).toBeVisible();
-    await expect(page.locator('text=Bitte geben Sie hier Ihre persönlichen Daten an.')).toBeVisible();
+    await page.locator("//span[text()='Nein, noch nicht']").click({ timeout: 15000 });
+    await page.getByRole('button', { name: 'Weiter' }).click();
+    await page.locator('.ml-2 > .db-radio-button__label > .db-radio-button__indicator > .db-radio-button__indicator-dot > svg > circle').click();
+    await page.getByRole('textbox', { name: 'Vorname(n)' }).fill('Max');
+    await page.getByRole('textbox', { name: 'Nachname' }).fill('Mustermann');
+    await page.getByLabel('Familienstand').selectOption('001_ledig');
+    await page.getByRole('textbox', { name: 'Geburtsdatum (TT.MM.JJJJ)' }).fill('01.01.1990');
+    await page.getByRole('textbox', { name: 'Geburtsort' }).fill('Berlin');
+    await page.getByText('Ich bin ausschließlich in').click();
+    await page.getByRole('textbox', { name: 'Straße und Hausnummer' }).fill('Teststr. 1');
+    await page.getByRole('textbox', { name: 'PLZ' }).fill('10115');
+    await page.getByRole('textbox', { name: 'Stadt' }).fill('Berlin');
+    await page.getByText('Teststr. 1, 10115 Berlin').click();
+    await page.getByRole('textbox', { name: 'Mobilnummer (z.B. +' }).fill('+491234567890');
+    await page.getByRole('textbox', { name: 'E-Mail' }).fill('invalid-email');
+    await page.getByRole('button', { name: 'Weiter', exact: true }).click();
 
-    // Verify form fields are present
-    await expect(page.getByLabel('Vorname(n)')).toBeVisible();
-    await expect(page.getByLabel('Nachname')).toBeVisible();
-    await expect(page.getByLabel(/Geburtsdatum/i)).toBeVisible();
-    */
+    await expect(page.locator('text=Bitte geben Sie eine gültige E-Mail-Adresse ein')).toBeVisible();
+  });
+
+  test('should require mandatory fields', async ({ page }) => {
+    const url = 'https://www.maxblue.de/opra4x/public/maxblue/security-account-opening/#/page-1-0?restartApplication=true&pageName=Kostenloses%20Wertpapierdepot%20von%20maxblue%20&pageUrl=https:%2F%2Fwww.deutsche-bank.de%2Fpk%2Fsparen-und-anlegen%2Fgeldanlage-online%2Fdepot.html&topic=neutral&businessUnit=Privatkunden&source=PWS%20PFB-Portal';
+    await page.goto(url);
+    await page.waitForLoadState('networkidle');
+
+    try {
+      const consentButton = page.getByRole('button', { name: /Zustimmen mit Zusammenführung/i });
+      await consentButton.waitFor({ timeout: 5000 });
+      await consentButton.click();
+    } catch {}
+
+    await page.locator("//span[text()='Nein, noch nicht']").click({ timeout: 15000 });
+    await page.getByRole('button', { name: 'Weiter' }).click();
+    await page.locator('.ml-2 > .db-radio-button__label > .db-radio-button__indicator > .db-radio-button__indicator-dot > svg > circle').click();
+    // Leave all fields empty and try to proceed
+    await page.getByRole('button', { name: 'Weiter', exact: true }).click();
+
+    await expect(page.locator('text=Bitte füllen Sie dieses Feld aus')).toBeVisible();
   });
 });

@@ -8,13 +8,13 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 export default defineConfig({
   testDir: './tests',
   timeout: 240000,
-  workers: 3,
+  workers: 6,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   expect: {
     timeout: 5000,
   },
-  reporter: [['html'], ['github']],
+  reporter: [['html', { open: 'never', outputFolder: 'playwright-report' }], ['github']],
   use: {
     actionTimeout: 15000,
     navigationTimeout: 180000,
